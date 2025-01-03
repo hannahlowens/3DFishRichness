@@ -12,7 +12,7 @@ library(ggplot2)
 library(ggpubr)
 library(tidyr)
 
-setwd("~/Dropbox/MARDIGRA/")
+#setwd("YOUR_DIRECTORY")
 
 # Modeling function
 modelFunction <- function(rawData){
@@ -57,19 +57,57 @@ gadiformesEnv <- crop(rast(x = "data/DiversityEstimates/gadiformesEnvelope3D.tif
 gadiformesGLM <- crop(rast(x = "data/DiversityEstimates/gadiformesGLM3D.tif"),
                       atlanticShapefile)[[1:100]]
 
+beloniformesEnv2D <- crop(rast("data/DiversityEstimates/BeloniformesEnvelope2D.tif"),
+                          atlanticShapefile)
+beloniformesGLM2D <- crop(rast("data/DiversityEstimates/BeloniformesGLM2D.tif"),
+                          atlanticShapefile)
+scombriformesEnv2D <- crop(rast("data/DiversityEstimates/ScombriformesEnvelope2D.tif"),
+                           atlanticShapefile)
+scombriformesGLM2D <- crop(rast("data/DiversityEstimates/ScombriformesGLM2D.tif"),
+                           atlanticShapefile)
+gadiformesEnv2D <- crop(rast("data/DiversityEstimates/GadiformesEnvelope2D.tif"),
+                        atlanticShapefile)
+gadiformesGLM2D <- crop(rast("data/DiversityEstimates/GadiformesGLM2D.tif"),
+                        atlanticShapefile)
+
+bGLM3dFlat <- crop(rast(x = "data/DiversityEstimates/BeloniformesGLM3D_horizontal.tif"), 
+                   atlanticShapefile)
+gGLM3dFlat <- crop(rast(x = "data/DiversityEstimates/GadiformesGLM3D_horizontal.tif"), 
+                   atlanticShapefile)
+sGLM3dFlat <- crop(rast(x = "data/DiversityEstimates/ScombriformesGLM3D_horizontal.tif"), 
+                   atlanticShapefile)
+
+bEnv3DFlat <- crop(rast(x = "data/DiversityEstimates/BeloniformesEnvelope3D_horizontal.tif"), 
+                   atlanticShapefile)
+gEnv3dFlat <- crop(rast(x = "data/DiversityEstimates/GadiformesEnvelope3D_horizontal.tif"), 
+                   atlanticShapefile)
+sEnv3dFlat <- crop(rast(x = "data/DiversityEstimates/ScombriformesEnvelope3D_horizontal.tif"), 
+                   atlanticShapefile)
+
 # Latitudinal trends in data with depth ----
+linePlotFunc <- function(x, name){
+  plot(x[[1]], main = paste("Mean Latitudinal", name, "Diversity"), type = "l", col = "black", ylim = c(0,35))
+  lines(x[[2]], col = "blue")
+  lines(x[[3]], col = "red")
+  lines(x[[4]], col = "green")
+  lines(x[[5]], col = "orange")
+  legend("topright", lwd=1, legend = c("Surface", "200m", "1000m", "2D", "3D"), col=c("black","blue", "red", "green", "orange"))
+}
+
 bGLMsurf <- latitudinalMean(beloniformesGLM[[1]])
 colnames(bGLMsurf)[2] <- "Species Richness" 
 bGLM200 <- latitudinalMean(beloniformesGLM[["200"]])
 colnames(bGLM200)[2] <- "Species Richness" 
 bGLM1000 <- latitudinalMean(beloniformesGLM[["1000"]])
-colnames(bGLM1000)[2] <- "Species Richness" 
+colnames(bGLM1000)[2] <- "Species Richness"
+bGLM2d <- latitudinalMean(belon2DGLM)
+colnames(bGLM2d)[2] <- "Species Richness"
+bGLM3dFlat <- latitudinalMean(bGLM3dFlat)
+colnames(bGLM3dFlat)[2] <- "Species Richness"
 
-pdf("~/Dropbox/MARDIGRA/Papers/beloniformesDiversityVsLatitude.pdf")
-plot(bGLMsurf, main = "Mean Latitudinal Beloniformes Diversity", type = "l", col = "black")
-lines(bGLM200, col = "blue")
-lines(bGLM1000, col = "red")
-legend("topright", lwd=1, legend = c("Surface", "200m", "1000m"), col=c("black","blue", "red"))
+pdf("~/Dropbox/MARDIGRA/Papers/beloniformesDiversityVsLatitudeGLM.pdf")
+x <- list(bGLMsurf, bGLM200, bGLM1000, bGLM2d, bGLM3dFlat)
+linePlotFunc(x, name = "Beloniformes")
 dev.off()
 
 sGLMsurf <- latitudinalMean(scombriformesGLM[[1]])
@@ -77,13 +115,15 @@ colnames(sGLMsurf)[2] <- "Species Richness"
 sGLM200 <- latitudinalMean(scombriformesGLM[["200"]])
 colnames(sGLM200)[2] <- "Species Richness" 
 sGLM1000 <- latitudinalMean(scombriformesGLM[["1000"]])
-colnames(sGLM1000)[2] <- "Species Richness" 
+colnames(sGLM1000)[2] <- "Species Richness"
+sGLM2d <- latitudinalMean(scomb2DGLM)
+colnames(sGLM2d)[2] <- "Species Richness"
+sGLM3dFlat <- latitudinalMean(sGLM3dFlat)
+colnames(sGLM3dFlat)[2] <- "Species Richness"
 
-pdf("~/Dropbox/MARDIGRA/Papers/scombriformesDiversityVsLatitude.pdf")
-plot(sGLM200, main = "Mean Latitudinal Scombriformes Diversity", type = "l", col = "blue")
-lines(sGLMsurf, col = "black")
-lines(sGLM1000, col = "red")
-legend("topright", lwd=1, legend = c("Surface", "200m", "1000m"), col=c("black","blue", "red"))
+pdf("~/Dropbox/MARDIGRA/Papers/scombriformesDiversityVsLatitudeGLM.pdf")
+x <- list(sGLMsurf, sGLM200, sGLM1000, sGLM2d, sGLM3dFlat)
+linePlotFunc(x, name = "Scombriformes")
 dev.off()
 
 gGLMsurf <- latitudinalMean(gadiformesGLM[[1]])
@@ -91,13 +131,63 @@ colnames(gGLMsurf)[2] <- "Species Richness"
 gGLM200 <- latitudinalMean(gadiformesGLM[["200"]])
 colnames(gGLM200)[2] <- "Species Richness" 
 gGLM1000 <- latitudinalMean(gadiformesGLM[["1000"]])
-colnames(gGLM1000)[2] <- "Species Richness" 
+colnames(gGLM1000)[2] <- "Species Richness"
+gGLM2d <- latitudinalMean(gadiformesGLM2D)
+colnames(gGLM2d)[2] <- "Species Richness"
+gGLM3dFlat <- latitudinalMean(gGLM3dFlat)
+colnames(gGLM3dFlat)[2] <- "Species Richness"
 
-pdf("~/Dropbox/MARDIGRA/Papers/gadiformesDiversityVsLatitude.pdf")
-plot(gGLM1000, main = "Mean Latitudinal Gadiformes Diversity", type = "l", col = "red")
-lines(gGLMsurf, col = "black")
-lines(gGLM200, col = "blue")
-legend("topright", lwd=1, legend = c("Surface", "200m", "1000m"), col=c("black","blue", "red"))
+pdf("~/Dropbox/MARDIGRA/Papers/gadiformesDiversityVsLatitudeGLM.pdf")
+x <- list(gGLMsurf, gGLM200, gGLM1000, gGLM2d, gGLM3dFlat)
+linePlotFunc(x, name = "Gadiformes")
+dev.off()
+
+bEnvsurf <- latitudinalMean(beloniformesEnv[[1]])
+colnames(bEnvsurf)[2] <- "Species Richness" 
+bEnv200 <- latitudinalMean(beloniformesEnv[["200"]])
+colnames(bEnv200)[2] <- "Species Richness" 
+bEnv1000 <- latitudinalMean(beloniformesEnv[["1000"]])
+colnames(bEnv1000)[2] <- "Species Richness"
+bEnv2d <- latitudinalMean(beloniformesEnv2D)
+colnames(bEnv2d)[2] <- "Species Richness"
+bEnv3dFlat <- latitudinalMean(bEnv3DFlat)
+colnames(bEnv3dFlat)[2] <- "Species Richness"
+
+pdf("~/Dropbox/MARDIGRA/Papers/beloniformesDiversityVsLatitudeEnv.pdf")
+x <- list(bEnvsurf, bEnv200, bEnv1000, bEnv2d, bEnv3dFlat)
+linePlotFunc(x, name = "Beloniformes")
+dev.off()
+
+sEnvsurf <- latitudinalMean(scombriformesEnv[[1]])
+colnames(sEnvsurf)[2] <- "Species Richness" 
+sEnv200 <- latitudinalMean(scombriformesEnv[["200"]])
+colnames(sEnv200)[2] <- "Species Richness" 
+sEnv1000 <- latitudinalMean(scombriformesEnv[["1000"]])
+colnames(sEnv1000)[2] <- "Species Richness"
+sEnv2d <- latitudinalMean(scombriformesEnv2D)
+colnames(sEnv2d)[2] <- "Species Richness"
+sEnv3dFlat <- latitudinalMean(sEnv3dFlat)
+colnames(sEnv3dFlat)[2] <- "Species Richness"
+
+pdf("~/Dropbox/MARDIGRA/Papers/scombriformesDiversityVsLatitudeEnv.pdf")
+x <- list(sEnvsurf, sEnv200, sEnv1000, sEnv2d, sEnv3dFlat)
+linePlotFunc(x, name = "Scombriformes")
+dev.off()
+
+gEnvsurf <- latitudinalMean(gadiformesEnv[[1]])
+colnames(gEnvsurf)[2] <- "Species Richness" 
+gEnv200 <- latitudinalMean(gadiformesEnv[["200"]])
+colnames(gEnv200)[2] <- "Species Richness" 
+gEnv1000 <- latitudinalMean(gadiformesEnv[["1000"]])
+colnames(gEnv1000)[2] <- "Species Richness"
+gEnv2d <- latitudinalMean(gadiformesEnv2D)
+colnames(gEnv2d)[2] <- "Species Richness"
+gEnv3dFlat <- latitudinalMean(gEnv3dFlat)
+colnames(gEnv3dFlat)[2] <- "Species Richness"
+
+pdf("~/Dropbox/MARDIGRA/Papers/gadiformesDiversityVsLatitudeEnv.pdf")
+x <- list(gEnvsurf, gEnv200, gEnv1000, gEnv2d, gEnv3dFlat)
+linePlotFunc(x, name = "Gadiformes")
 dev.off()
 
 # Simple 2D vs 3D model ----

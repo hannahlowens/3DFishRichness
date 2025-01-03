@@ -9,6 +9,8 @@ library(ggplot2)
 library(viridis)
 library(rphylopic)
 
+#setwd("YOUR_DIRECTORY")
+
 # Get lists of taxa from FishBase and OBIS -----
 # A convenience function
 '%!in%' <- function(x,y)!('%in%'(x,y))

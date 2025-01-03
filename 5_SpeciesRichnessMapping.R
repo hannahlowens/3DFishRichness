@@ -11,7 +11,7 @@ library(rnaturalearth)
 library(ggpubr)
 library(cowplot)
 
-setwd("~/Dropbox/MARDIGRA/data/")
+#setwd("YOUR_DIRECTORY")
 
 # Define functions ----
 # Reads in raw model outputs and puts them all in the same extent

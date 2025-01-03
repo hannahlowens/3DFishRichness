@@ -3,9 +3,11 @@ library(ggplot2)
 library(ggtext)
 library(ggpubr)
 
+#setwd("YOUR_DIRECTORY")
+
 # Read in data
-glm2D <- read.csv("~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/GLM2DModelDiagnosticStats.csv")
-glm3D <- read.csv("~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/GLM3DModelDiagnosticStats.csv")
+glm2D <- read.csv("Appendix Material/GLM2DModelDiagnosticStats.csv")
+glm3D <- read.csv("Appendix Material/GLM3DModelDiagnosticStats.csv")
 
 ogNames <- names(glm3D)
 
@@ -19,7 +21,7 @@ glmDiff$species <- glm2D$species
 # Look at relevant correlations
 pearCor <- cor(glm2D[,5:10], glm3D[,5:10], 
                use = "pairwise.complete.obs")
-write.csv(pearCor, "~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/CorrelationAmongModelStats.csv")
+write.csv(pearCor, "Appendix Material/CorrelationAmongModelStats.csv")
 
 allGLMStats <- merge(glm2D, glm3D)
 allGLMStats <- merge(allGLMStats, glmDiff)
@@ -43,7 +45,7 @@ wilcox.test(allGLMStats$Kappa_2D, allGLMStats$Kappa_3D,
 wilcox.test(allGLMStats$TSS_2D, allGLMStats$TSS_3D, 
             paired=TRUE, alternative = "greater")
 
-write.csv(allGLMStats, "~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/AllModelStatistics.csv", row.names = FALSE)
+write.csv(allGLMStats, "Appendix Material/AllModelStatistics.csv", row.names = FALSE)
 
 AUCplot <- ggplot(allGLMStats, aes(x = AUC_2D, y = AUC_3D)) +
   geom_point() + 
@@ -84,7 +86,7 @@ KappaPlot <- ggplot(allGLMStats, aes(x =Kappa_2D, y = Kappa_3D)) +
   theme(legend.position = "none")
 
 # Plot 'em
-pdf("~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/ModelStatPlots.pdf")
+pdf("Appendix Material/ModelStatPlots.pdf")
 ggarrange(AUCplot, AICplot,
           TSSplot, KappaPlot, 
           ncol = 2, nrow = 2)
@@ -138,7 +140,7 @@ legendPlot <- ggplot(allGLMStatsLong, aes(x = AUC, y = AUC,
   guides(colour = guide_legend(override.aes = list(size=8)))
 
 # Plot 'em
-pdf("~/Dropbox/MARDIGRA/Papers/Manuscript/Appendix Material/ModelStatPlotsVsPresences.pdf")
+pdf("Appendix Material/ModelStatPlotsVsPresences.pdf")
 ggarrange(AUCpres, AICpres,
           TSSpres, KappaPres, legendPlot,
           ncol = 3, nrow = 2)

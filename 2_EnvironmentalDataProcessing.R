@@ -3,7 +3,7 @@ library(voluModel)
 library(reshape)
 library(fields)
 
-setwd("~/Dropbox/MARDIGRA/data/")
+#setwd("YOUR_DIRECTORY")
 
 # Creating ocean volume ----
 bathymetry <- rast("EnvironmentalData/ETOPO_2022_v1_60s_N90W180_bed.tif")

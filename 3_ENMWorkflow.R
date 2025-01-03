@@ -11,7 +11,7 @@ library(cowplot) #
 library(dplyr)
 library(glm2)
 
-setwd("~/Dropbox/MARDIGRA/data/")
+#setwd("YOUR_DIRECTORY")
 
 # Load environmental data ----
 oxygen <- scale(rast("EnvironmentalData/ProcessedEnvtData/AOU.tif"))

@@ -1,5 +1,5 @@
 # Supplemental Material
-Scripts for the manuscript "Depth Matters for Marine Diversity", currently in prep.
+Scripts for the manuscript "Depth Matters for Marine Diversity", which was recently submitted for review.
 
 ## Occurrence Search
 This script created and collated a checklist of Atlantic fishes in the orders of interest, searched GBIF and OBIS for all available occurrences. Finally, the script merges all records by species according to Catalog of Fishes taxonomy while performing some basic fit-for-use filtration.
